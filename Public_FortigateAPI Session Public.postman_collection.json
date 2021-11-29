@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "72bf49ad-a338-44cd-8007-90249dac12fa",
+		"name": "FortigateAPI Session Public",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login Session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var current_token = pm.cookies.get('ccsrftoken');\r",
+							"\r",
+							"if ( current_token !== null)\r",
+							"    pm.environment.set(\"COOK_TOKEN1\", current_token.slice(1,-1));\r",
+							"\r",
+							"sleep(3000);\r",
+							"\r",
+							"function sleep(numberMillis) {\r",
+							"    var now = new Date();\r",
+							"    var exitTime = now.getTime() + numberMillis;\r",
+							"    while (true) {\r",
+							"        now = new Date();\r",
+							"        if (now.getTime() > exitTime)\r",
+							"        return;\r",
+							"    }\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{USERNAME}}",
+							"type": "text"
+						},
+						{
+							"key": "secretkey",
+							"value": "{{PASSWORD}}",
+							"type": "text"
+						},
+						{
+							"key": "ajax",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{CONTROLLER}}/logincheck",
+					"protocol": "https",
+					"host": [
+						"{{CONTROLLER}}"
+					],
+					"path": [
+						"logincheck"
+					]
+				},
+				"description": "Retrieves a list of libraries on the TAS."
+			},
+			"response": []
+		},
+		{
+			"name": "Backup current config - Global",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"followOriginalHttpMethod": true,
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CSRFTOKEN",
+						"value": "{{COOK_TOKEN1}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{CONTROLLER}}/api/v2/monitor/system/config/backup?scope=global",
+					"protocol": "https",
+					"host": [
+						"{{CONTROLLER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"monitor",
+						"system",
+						"config",
+						"backup"
+					],
+					"query": [
+						{
+							"key": "scope",
+							"value": "global"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Device Description",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"followOriginalHttpMethod": true,
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-CSRFTOKEN",
+						"value": "{{COOK_TOKEN1}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{CONTROLLER}}/api/v2/monitor/system/config",
+					"protocol": "https",
+					"host": [
+						"{{CONTROLLER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"monitor",
+						"system",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Restore config file - Global",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"followOriginalHttpMethod": true,
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFTOKEN",
+						"value": "{{COOK_TOKEN1}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"contentType": "text/plain",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "source",
+							"value": "upload",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "scope",
+							"value": "vdom",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "vdom",
+							"value": "root",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{CONTROLLER}}/api/v2/monitor/system/config/restore?scope=global&source=upload",
+					"protocol": "https",
+					"host": [
+						"{{CONTROLLER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"monitor",
+						"system",
+						"config",
+						"restore"
+					],
+					"query": [
+						{
+							"key": "scope",
+							"value": "global"
+						},
+						{
+							"key": "source",
+							"value": "upload"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout Session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRFTOKEN",
+						"value": "{{COOK_TOKEN1}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{CONTROLLER}}/logout",
+					"protocol": "https",
+					"host": [
+						"{{CONTROLLER}}"
+					],
+					"path": [
+						"logout"
+					]
+				},
+				"description": "Retrieves a list of libraries on the TAS."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
